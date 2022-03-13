@@ -1,0 +1,3 @@
+[submodule "NoduleNet"]
+	path = NoduleNet
+	url = https://github.com/uci-cbcl/NoduleNet.git
