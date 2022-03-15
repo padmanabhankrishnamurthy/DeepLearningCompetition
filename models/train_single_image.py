@@ -13,6 +13,8 @@ from models.SingleImageModel import SingleImageModel
 
 def train(model, train_loader, optimizer, device, epochs, batch_size):
 
+    criterion = nn.L1Loss()
+    
     for epoch in range(epochs):
         epoch_loss = 0
         pbar = tqdm(train_loader)
@@ -41,12 +43,11 @@ if __name__ == '__main__':
     batch_size = 64
     epochs = 10
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    criterion = nn.L1Loss()
 
     model = SingleImageModel().to(device)
     dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
     train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
-    
+
     train(
         model,
         train_loader,
