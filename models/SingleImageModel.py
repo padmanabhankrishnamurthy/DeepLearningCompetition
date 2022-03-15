@@ -11,7 +11,11 @@ class SingleImageModel(nn.Module):
 
         self.image_encoder = self.get_image_encoder()
         self.prediction_head = self.get_prediction_head()
-        
+
+        # freeze resnet
+        for param in self.image_encoder.parameters():
+            param.requires_grad = False
+
         self.image_encoder.fc = self.prediction_head
 
     def get_image_encoder(self):
