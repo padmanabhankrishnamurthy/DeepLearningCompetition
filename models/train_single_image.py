@@ -11,12 +11,7 @@ from data_utils.misc import norm_tensor_to_img
 from data_utils.SingleImageDataset import SingleImageDataset
 from models.SingleImageModel import SingleImageModel
 
-if __name__ == '__main__':
-    train_file = '../data/Train.csv'
-    image_dir = '../data/Train'
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    epochs = 10
-
+def train(train_file, image_dir, device, epochs):
     dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
     train_loader = DataLoader(dataset=dataset, batch_size=1, shuffle=True)
     model = SingleImageModel().to(device)
@@ -42,5 +37,15 @@ if __name__ == '__main__':
             batch_loss.backward()
             optimizer.step()
             pbar.set_description('Epoch: {} Loss: {}'.format(epoch + 1, batch_loss))
+    
+    return model
+
+if __name__ == '__main__':
+    train_file = '../data/Train.csv'
+    image_dir = '../data/Train'
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    epochs = 10
+
+    train(train_file, image_dir, device, epochs)
 
 
