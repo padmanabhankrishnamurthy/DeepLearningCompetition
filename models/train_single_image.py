@@ -24,6 +24,7 @@ def train(train_file, image_dir, device, epochs):
         pbar = tqdm(train_loader)
 
         for batch in pbar:
+            batch = batch.to(device)
             # every item in batch: (image, percentage, patient_id, filename)
             optimizer.zero_grad()
 
