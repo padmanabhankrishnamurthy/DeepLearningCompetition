@@ -11,9 +11,7 @@ from data_utils.misc import norm_tensor_to_img
 from data_utils.SingleImageDataset import SingleImageDataset
 from models.SingleImageModel import SingleImageModel
 
-def train(train_file, image_dir, device, epochs):
-    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
-    train_loader = DataLoader(dataset=dataset, batch_size=1, shuffle=True)
+def train(train_loader, device, epochs):
     model = SingleImageModel().to(device)
 
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
@@ -44,8 +42,11 @@ if __name__ == '__main__':
     train_file = '../data/Train.csv'
     image_dir = '../data/Train'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    batch_size = 64
     epochs = 10
 
+    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
+    train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
     train(train_file, image_dir, device, epochs)
 
 
