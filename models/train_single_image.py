@@ -36,8 +36,7 @@ def train(train_loader, device, epochs, batch_size):
             optimizer.step()
             pbar.set_description('Epoch: {} Loss: {}'.format(epoch + 1, batch_loss))
 
-        print(f"Avg Batch Loss: {epoch_loss/len(train_loader)}")
-        print(f"Avg Sample Loss: {epoch_loss/(len(train_loader)*batch_size)}")
+        print(f"Avg Loss: {epoch_loss/len(train_loader)}")
     return model
 
 if __name__ == '__main__':
