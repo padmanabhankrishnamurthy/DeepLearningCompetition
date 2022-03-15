@@ -24,15 +24,14 @@ def train(train_file, image_dir, device, epochs):
         pbar = tqdm(train_loader)
 
         for batch in pbar:
-            batch = batch.to(device)
             # every item in batch: (image, percentage, patient_id, filename)
             optimizer.zero_grad()
 
             images = batch[0]
             percentages = batch[1]
 
-            predictions = model(images)
-            batch_loss = criterion(percentages, predictions)
+            predictions = model(images.to(device))
+            batch_loss = criterion(percentages.to(device), predictions)
             epoch_loss+=batch_loss
 
             batch_loss.backward()
