@@ -11,7 +11,7 @@ from data_utils.misc import norm_tensor_to_img
 from data_utils.SingleImageDataset import SingleImageDataset
 from models.SingleImageModel import SingleImageModel
 
-def train(train_loader, device, epochs):
+def train(train_loader, device, epochs, batch_size):
     model = SingleImageModel().to(device)
 
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
@@ -35,7 +35,9 @@ def train(train_loader, device, epochs):
             batch_loss.backward()
             optimizer.step()
             pbar.set_description('Epoch: {} Loss: {}'.format(epoch + 1, batch_loss))
-    
+
+        print(f"Avg Batch Loss: {epoch_loss/len(train_loader)}")
+        print(f"Avg Sample Loss: {epoch_loss/(len(train_loader)*batch_size)}")
     return model
 
 if __name__ == '__main__':
@@ -47,6 +49,6 @@ if __name__ == '__main__':
 
     dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
     train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
-    train(train_loader, device, epochs)
+    train(train_loader, device, epochs, batch_size)
 
 
