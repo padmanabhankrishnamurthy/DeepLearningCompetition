@@ -47,6 +47,6 @@ if __name__ == '__main__':
 
     dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
     train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
-    train(train_file, image_dir, device, epochs)
+    train(train_loader, device, epochs)
 
 
