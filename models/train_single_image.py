@@ -38,13 +38,14 @@ if __name__ == '__main__':
     train_file = '../data/Train.csv'
     image_dir = '../data/Train'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    batch_size = 64
-    epochs = 10
+
+    model = SingleImageModel(classifier=True).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.L1Loss()
+    batch_size = 4
+    epochs = 10
 
-    model = SingleImageModel().to(device)
-    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
+    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir, onehot=True)
     train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 
     train(
