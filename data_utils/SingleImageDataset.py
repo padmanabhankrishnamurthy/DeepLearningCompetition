@@ -85,4 +85,4 @@ if __name__ == '__main__':
     train_file = '../data/Train.csv'
     image_dir = '../data/Train'
 
-    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir, onehot=True)g
+    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir, onehot=True)
