@@ -38,7 +38,7 @@ class SingleImageModel(nn.Module):
         return prediction_head
 
     def forward(self, x):
-        x = self.modelr(x)
+        x = self.model(x)
         return x
 
     
