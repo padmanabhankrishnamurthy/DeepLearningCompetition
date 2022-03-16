@@ -36,7 +36,7 @@ class SingleImageModel(nn.Module):
                 nn.ReLU(),
                 nn.Linear(in_features=256, out_features=128, bias=True),
                 nn.ReLU(),
-                nn.Linear(in_features=128, out_features=100, bias=True),
+                nn.Linear(in_features=128, out_features=101, bias=True),
                 nn.Softmax()
             )
         else:
