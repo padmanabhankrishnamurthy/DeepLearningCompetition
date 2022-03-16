@@ -1,5 +1,5 @@
 import os
-import torch
+import torch.nn as nn
 import numpy as np
 
 from PIL import Image
@@ -8,7 +8,8 @@ from torchvision import transforms as T
 
 class SingleImageDataset(Dataset):
 
-    def __init__(self, train_file, image_dir, val=False):
+    def __init__(self, train_file, image_dir, val=False, onehot=False):
+        self.onehot = onehot
         self.val = val
         self.image_dir = image_dir
 
@@ -54,8 +55,12 @@ class SingleImageDataset(Dataset):
                                     T.ToTensor(),
                                     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
             image = transforms(image)
-
-            percentage = float(item[1])
+            
+            if self.onehot:
+                percentage = nn.functional.one_hot(float(item[1]), num_classes=100)
+            else:
+                percentage = float(item[1])
+                
             patient_id = int(item[2])
 
             return (image, percentage, patient_id, filename)

@@ -31,8 +31,11 @@ class SingleImageModel(nn.Module):
     def get_prediction_head(self):
         prediction_head = nn.Sequential(
             nn.Linear(in_features=512, out_features=256, bias=True),
+            nn.ReLU(),
             nn.Linear(in_features=256, out_features=128, bias=True),
-            nn.Linear(in_features=128, out_features=1, bias=True)
+            nn.ReLU(),
+            nn.Linear(in_features=128, out_features=100, bias=True),
+            nn.Softmax()
         )
 
         return prediction_head
