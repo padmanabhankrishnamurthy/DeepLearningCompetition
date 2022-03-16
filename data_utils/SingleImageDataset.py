@@ -1,4 +1,5 @@
 import os
+from h11 import Data
 import torch
 import torch.nn as nn
 import numpy as np
@@ -58,8 +59,10 @@ class SingleImageDataset(Dataset):
             image = transforms(image)
             
             if self.onehot:
-                percentage = torch.from_numpy(np.array(int(item[1])))
-                percentage = nn.functional.one_hot(percentage, num_classes=100)
+                percentage = np.array([float(item[1])])
+                percentage = percentage.astype(int)
+                percentage = torch.from_numpy(percentage)
+                percentage = nn.functional.one_hot(percentage, num_classes=101)
             else:
                 percentage = float(item[1])
 
@@ -86,3 +89,6 @@ if __name__ == '__main__':
     image_dir = '../data/Train'
 
     dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir, onehot=True)
+    dataloader = DataLoader(dataset, batch_size=1)
+    for data in dataloader:
+        print(data)
