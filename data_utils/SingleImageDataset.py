@@ -35,7 +35,10 @@ class SingleImageDataset(Dataset):
         return items
     
     def __len__(self):
-        return len(self.items)
+        if not self.val: # training
+            return len(self.items)
+        else: # validation
+            return len(self.images)
     
     def __getitem__(self, idx):
         # training - use self.items
