@@ -58,10 +58,9 @@ class SingleImageDataset(Dataset):
             image = transforms(image)
             
             if self.onehot:
-                percentage = np.array([float(item[1])])
-                percentage = percentage.astype(int)
-                percentage = torch.from_numpy(percentage)
-                percentage = nn.functional.one_hot(percentage, num_classes=101)
+                percentage = [0.0 for i in range(101)]
+                percentage[int(float(item[1]))] = 1.0
+                percentage = torch.from_numpy(np.array(percentage))
             else:
                 percentage = float(item[1])
 
