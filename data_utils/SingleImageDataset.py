@@ -63,6 +63,8 @@ class SingleImageDataset(Dataset):
         # validation - use self.images
         else:
             image = self.images[idx]
+            image_name = image
+
             image = os.path.join(self.image_dir, image)
             image = np.array(Image.open(image))[:, :, :-1] # remove alpha channel
             transforms = T.Compose([T.ToPILImage(),
@@ -70,4 +72,4 @@ class SingleImageDataset(Dataset):
                                     T.ToTensor(),
                                     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
             image = transforms(image)
-            return image
+            return (image, image_name)
