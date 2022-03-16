@@ -11,9 +11,7 @@ from data_utils.misc import norm_tensor_to_img
 from data_utils.SingleImageDataset import SingleImageDataset
 from models.SingleImageModel import SingleImageModel
 
-def train(model, train_loader, optimizer, device, epochs, batch_size):
-
-    criterion = nn.L1Loss()
+def train(model, train_loader, optimizer, criterion, device, epochs):
     
     for epoch in range(epochs):
         epoch_loss = 0
@@ -43,18 +41,19 @@ if __name__ == '__main__':
     batch_size = 64
     epochs = 10
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    criterion = nn.L1Loss()
 
     model = SingleImageModel().to(device)
     dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir)
     train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 
     train(
-        model,
-        train_loader,
-        optimizer,
-        device,
-        epochs,
-        batch_size
+        model=model,
+        train_loader=train_loader,
+        optimizer=optimizer,
+        criterion=criterion,
+        device=device,
+        epochs=epochs
     )
 
 
