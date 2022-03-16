@@ -8,11 +8,23 @@ from torchvision import transforms as T
 
 class SingleImageDataset(Dataset):
 
-    def __init__(self, train_file, image_dir):
-        self.train_file = train_file
+    def __init__(self, train_file, image_dir, val=False):
+        self.val = val
         self.image_dir = image_dir
-        self.items = self.get_items()
 
+        if not self.val:
+            self.train_file = train_file
+            self.items = self.get_items()
+        else:
+            self.images = self.get_image_list(self.image_dir)
+
+    def get_image_list(self, image_dir):
+        images = []
+        for file in os.listdir(image_dir):
+            if '.png' in file:
+                images.append(file)
+        return images
+    
     def get_items(self):
         items = []
         with open(self.train_file, 'r') as file:
@@ -26,19 +38,33 @@ class SingleImageDataset(Dataset):
         return len(self.items)
     
     def __getitem__(self, idx):
-        item = self.items[idx]
+        # training - use self.items
+        if not self.val:
+            item = self.items[idx]
 
-        filename = item[0]
+            filename = item[0]
 
-        image = os.path.join(self.image_dir, item[0])
-        image = np.array(Image.open(image))[:, :, :-1] # remove alpha channel
-        transforms = T.Compose([T.ToPILImage(),
-                                T.Resize((256,256)),
-                                T.ToTensor(),
-                                T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
-        image = transforms(image)
+            image = os.path.join(self.image_dir, item[0])
+            image = np.array(Image.open(image))[:, :, :-1] # remove alpha channel
+            transforms = T.Compose([T.ToPILImage(),
+                                    T.Resize((256,256)),
+                                    T.ToTensor(),
+                                    T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
+            image = transforms(image)
 
-        percentage = float(item[1])
-        patient_id = int(item[2])
+            percentage = float(item[1])
+            patient_id = int(item[2])
 
-        return (image, percentage, patient_id, filename)
+            return (image, percentage, patient_id, filename)
+        
+        # validation - use self.images
+        else:
+            image = self.images[idx]
+            image = os.path.join(self.image_dir, image)
+            image = np.array(Image.open(image))[:, :, :-1] # remove alpha channel
+            transforms = T.Compose([T.ToPILImage(),
+                                    T.Resize((256,256)),
+                                    T.ToTensor(),
+                                    T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
+            image = transforms(image)
+            return image
