@@ -1,4 +1,5 @@
 import os
+import torch
 import torch.nn as nn
 import numpy as np
 
@@ -57,10 +58,11 @@ class SingleImageDataset(Dataset):
             image = transforms(image)
             
             if self.onehot:
-                percentage = nn.functional.one_hot(float(item[1]), num_classes=100)
+                percentage = torch.from_numpy(np.array(float(item[1])))
+                percentage = nn.functional.one_hot(percentage, num_classes=100)
             else:
                 percentage = float(item[1])
-                
+
             patient_id = int(item[2])
 
             return (image, percentage, patient_id, filename)
