@@ -4,7 +4,7 @@ import torch.nn as nn
 import numpy as np
 
 from PIL import Image
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms as T
 
 class SingleImageDataset(Dataset):
@@ -58,7 +58,7 @@ class SingleImageDataset(Dataset):
             image = transforms(image)
             
             if self.onehot:
-                percentage = torch.from_numpy(np.array(float(item[1])))
+                percentage = torch.from_numpy(np.array(int(item[1])))
                 percentage = nn.functional.one_hot(percentage, num_classes=100)
             else:
                 percentage = float(item[1])
@@ -80,3 +80,9 @@ class SingleImageDataset(Dataset):
                                     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
             image = transforms(image)
             return (image, image_name)
+
+if __name__ == '__main__':
+    train_file = '../data/Train.csv'
+    image_dir = '../data/Train'
+
+    dataset = SingleImageDataset(train_file=train_file, image_dir=image_dir, onehot=True)g
