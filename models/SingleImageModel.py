@@ -3,11 +3,12 @@ import torchvision.models as models
 
 class SingleImageModel(nn.Module):
 
-    def __init__(self):
+    def __init__(self, classifier=False):
         '''
             param device: set device to 'cpu' or 'cuda', default 'cpu'
         '''
         super(SingleImageModel, self).__init__()
+        self.classifier = classifier
         self.model = self.build_model()
 
     def build_model(self):
@@ -29,14 +30,23 @@ class SingleImageModel(nn.Module):
         return resnet
 
     def get_prediction_head(self):
-        prediction_head = nn.Sequential(
-            nn.Linear(in_features=512, out_features=256, bias=True),
-            nn.ReLU(),
-            nn.Linear(in_features=256, out_features=128, bias=True),
-            nn.ReLU(),
-            nn.Linear(in_features=128, out_features=100, bias=True),
-            nn.Softmax()
-        )
+        if self.classifier:
+            prediction_head = nn.Sequential(
+                nn.Linear(in_features=512, out_features=256, bias=True),
+                nn.ReLU(),
+                nn.Linear(in_features=256, out_features=128, bias=True),
+                nn.ReLU(),
+                nn.Linear(in_features=128, out_features=100, bias=True),
+                nn.Softmax()
+            )
+        else:
+            prediction_head = nn.Sequential(
+                nn.Linear(in_features=512, out_features=256, bias=True),
+                nn.ReLU(),
+                nn.Linear(in_features=256, out_features=128, bias=True),
+                nn.ReLU(),
+                nn.Linear(in_features=128, out_features=1, bias=True)
+            )
 
         return prediction_head
 
