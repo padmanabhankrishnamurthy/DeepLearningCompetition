@@ -1,6 +1,5 @@
 import numpy as np
 import os
-import SITK
 import argparse as argparse
 from PIL import Image
 from lungmask import mask
