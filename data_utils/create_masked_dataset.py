@@ -7,7 +7,7 @@ import SimpleITK as sitk
 import cv2
 from tqdm import tqdm
 
-def get_cropped_image(image_path, model):
+def get_cropped_image(image_path):
     img = np.array(Image.open(image_path))
 
     # crop by white
