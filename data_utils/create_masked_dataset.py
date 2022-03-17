@@ -5,8 +5,10 @@ import argparse as argparse
 from PIL import Image
 from lungmask import mask
 import SimpleITK as sitk
+import cv2
+from tqdm import tqdm
 
-def get_masked_image(image_path, model):
+def get_cropped_image(image_path, model):
     img = np.array(Image.open(image_path))
 
     # crop by white
@@ -20,6 +22,7 @@ def get_masked_image(image_path, model):
     segmentation_relu = (segmentation > 0).transpose(1, 2, 0)
 
     result = np.multiply(segmentation_relu, res_img)
+    return result
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -27,9 +30,11 @@ if __name__ == '__main__':
     parser.add_argument('-output_dir')
     args = parser.parse_args()
 
-    
-
-    for file in os.listdir(args.input_dir):
+    for file in tqdm(os.listdir(args.input_dir)):
         if '.png' not in file:
             continue
+
+        cropped = get_cropped_image(os.path.join(args.input_dir, file))
+        cv2.imwrite(os.path.join(args.output_dir, file), cropped)
+
 
