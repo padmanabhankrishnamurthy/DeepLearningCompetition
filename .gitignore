@@ -1,4 +1,6 @@
-/data
+/data/*/
+/data/*.csv
+/data/*.zip
 .DS_Store
 */__pycache__
 scratch/
